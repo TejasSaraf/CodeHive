@@ -3,10 +3,12 @@ import Google from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/app/components/lib/prisma";
 import Nodemailer from "next-auth/providers/nodemailer";
+import GitHub from "next-auth/providers/github";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Google,
+    GitHub,
     Nodemailer({
       server: {
         host: process.env.EMAIL_SERVER_HOST,

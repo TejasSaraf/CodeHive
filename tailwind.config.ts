@@ -12,6 +12,24 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        sans: [
+          '-apple-system', 
+          'BlinkMacSystemFont', 
+          '"SF Pro Text"', 
+          '"SF Pro Display"', 
+          '"San Francisco"', 
+          'system-ui', 
+          'sans-serif'
+        ],
+        display: [
+          '-apple-system', 
+          'BlinkMacSystemFont', 
+          '"SF Pro Display"', 
+          'system-ui', 
+          'sans-serif'
+        ],
+      },
     },
   },
   plugins: [],
