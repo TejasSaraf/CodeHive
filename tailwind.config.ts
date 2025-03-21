@@ -9,26 +9,39 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        textGrey:"#71767b",
+        textGreyLight:"#e7e9ea",
+        borderGrey:"#2f3336",
+        inoutGrey:"#202327",
+        iconBlue:"#id9bf0",
+        iconGreen:"#00ba7c",
+        iconPink:"#f91880",
       },
       fontFamily: {
         sans: [
-          '-apple-system', 
-          'BlinkMacSystemFont', 
-          '"SF Pro Text"', 
-          '"SF Pro Display"', 
-          '"San Francisco"', 
-          'system-ui', 
-          'sans-serif'
+          "-apple-system",
+          "BlinkMacSystemFont",
+          '"SF Pro Text"',
+          '"SF Pro Display"',
+          '"San Francisco"',
+          "system-ui",
+          "sans-serif",
         ],
         display: [
-          '-apple-system', 
-          'BlinkMacSystemFont', 
-          '"SF Pro Display"', 
-          'system-ui', 
-          'sans-serif'
+          "-apple-system",
+          "BlinkMacSystemFont",
+          '"SF Pro Display"',
+          "system-ui",
+          "sans-serif",
         ],
+      },
+      screens: {
+        xsm: "500px",
+        sm: "600px",
+        md: "690px",
+        lg: "988px",
+        xl: "1078px",
+        xxl: "1265px",
       },
     },
   },
