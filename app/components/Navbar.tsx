@@ -26,7 +26,7 @@ export default function Navbar() {
         </h1>
       </div>
 
-      <button 
+      <button
         type="button"
         className="font-sans text-white text-xl border-[1px] border-borderGrey rounded-lg px-4 py-1"
         onClick={handleSignIn}

@@ -1,9 +1,9 @@
 "use client";
 import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
-import Rightbar from "../pages/Rightbar";
+import Rightbar from "./Rightbar";
 import Homepage from "./Homepage";
-import Navigation from "../pages/Navigation";
+import Navigation from "./Navigation";
 
 export default function ConditionalRendering() {
   const pathName = usePathname();
