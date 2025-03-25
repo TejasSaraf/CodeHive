@@ -1,7 +1,15 @@
+"use client"
 import React from "react";
 import Image from "./Image";
+import { useRouter } from "next/navigation";
 
 export default function Share() {
+    const router = useRouter();
+  
+    const handlePostContent = () => {
+      router.push("/PageContent");
+    };
+
   return (
     <div className="p-4 flex gap-4">
       <div className="relative w-10 h-10 rounded-full overflow-hidden cursor-pointer">
@@ -9,13 +17,16 @@ export default function Share() {
       </div>
 
       <div className="flex flex-1 flex-col gap-4 cursor-pointer">
-        <div className="flex items-center border-[1px] border-borderGrey bg-inoutGrey w-100 h-12 rounded-md">
+      <button
+          onClick={handlePostContent} 
+          className="flex items-center border-[1px] border-borderGrey bg-inoutGrey w-100 h-12 rounded-md"
+        >
           <p className="p-2 text-white">Write your text here</p>
-        </div>
+        </button>
 
         <div className="flex align-center border-[1px] border-borderGrey bg-inoutGrey w-100 h-12 rounded-md justify-between items-center p-4">
           <p className="text-white">Add to your post</p>
-          <div className="flex gap-2 align-center justify-center">
+          <div className="flex gap-4 align-center justify-center">
             <button className="flex flex-col items-center ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
