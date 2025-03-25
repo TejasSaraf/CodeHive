@@ -1,14 +1,10 @@
-"use client"
+"use client";
 import React from "react";
-import Image from "./Image";
+import Image from "../components/Image";
 import { useRouter } from "next/navigation";
 
 export default function Share() {
-    const router = useRouter();
-  
-    const handlePostContent = () => {
-      router.push("/PageContent");
-    };
+  const router = useRouter();
 
   return (
     <div className="p-4 flex gap-4">
@@ -17,8 +13,9 @@ export default function Share() {
       </div>
 
       <div className="flex flex-1 flex-col gap-4 cursor-pointer">
-      <button
-          onClick={handlePostContent} 
+        <button
+          type="button"
+          onClick={() => router.push("/PostContent")}
           className="flex items-center border-[1px] border-borderGrey bg-inoutGrey w-100 h-12 rounded-md"
         >
           <p className="p-2 text-white">Write your text here</p>

@@ -31,7 +31,6 @@ export default function SignIn() {
               viewBox="0 0 24 24"
               fill="none"
               role="img"
-              aria-hidden="true"
               className="crayons-icon crayons-icon--default"
             >
               <path
@@ -74,7 +73,6 @@ export default function SignIn() {
               viewBox="0 0 24 24"
               fill="none"
               role="img"
-              aria-hidden="true"
               className="crayons-icon crayons-icon--default"
             >
               <path

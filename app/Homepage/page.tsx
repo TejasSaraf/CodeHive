@@ -1,6 +1,6 @@
 import React from "react";
-import Feed from "./Feed";
-import Share from "./Share";
+import Feed from "../Feed/page";
+import Share from "../Share/page";
 
 export default function Homepage() {
   return (

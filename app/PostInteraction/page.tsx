@@ -12,7 +12,6 @@ export default function PostInteraction() {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             id="thumbs-up-outline-medium"
-            aria-hidden="true"
             role="none"
             data-supported-dps="24x24"
             fill="grey"
@@ -28,7 +27,6 @@ export default function PostInteraction() {
         <div className="Comment flex items-center gap-2 cursor-pointer group ">
           <svg
             viewBox="0 0 24 24"
-            aria-hidden="true"
             className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-1xvli5t r-1hdv0qi w-5"
             fill="grey"
           >
@@ -42,7 +40,6 @@ export default function PostInteraction() {
         <div className="Save flex items-center cursor-pointer group ">
           <svg
             viewBox="0 0 24 24"
-            aria-hidden="true"
             className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-1xvli5t r-1hdv0qi w-5"
             fill="grey"
           >

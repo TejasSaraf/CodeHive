@@ -149,7 +149,7 @@ export default function Navigation() {
             strokeLinejoin="round"
           />
         </svg>
-        <Link href="/" className="text-white text-base font-sans">
+        <Link href="/SignIn" className="text-white text-base font-sans" >
           Logout
         </Link>
       </span>

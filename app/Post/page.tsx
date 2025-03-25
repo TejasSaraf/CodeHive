@@ -1,7 +1,7 @@
 import React from "react";
-import Image from "./Image";
-import PostInfo from "./PostInfo";
-import PostInteraction from "./PostInteraction";
+import Image from "../components/Image";
+import PostInfo from "../PostInfo/page";
+import PostInteraction from "../PostInteraction/page";
 
 export default function Post() {
   return (
