@@ -24,8 +24,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  Navigation,
+  Rightbar,
+  SignIn
 }: Readonly<{
   children: React.ReactNode;
+  Navigation: React.ReactNode;
+  Rightbar: React.ReactNode;
+  SignIn: React.ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -33,8 +39,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black`}
       >
         {children}
-        <Navbar/>
-        <ConditionalRendering />
+        <Navbar />
+        <div className="max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl xxl:max-w-screen-xxl mx-auto flex justify-between">
+          <div className="px-2 h-screen xxl:px-8 xsm:px-4">{Navigation}</div>
+          <ConditionalRendering/>
+          <div className="hidden lg:flex ml-4 md:ml-8 h-screen flex-1">
+            {Rightbar}
+          </div>
+        </div>
       </body>
     </html>
   );

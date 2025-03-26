@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import Feed from "../Feed/page";
 import Share from "../Share/page";
+import PostContent from "../PostContent/page"; 
+import Rightbar from "../@Rightbar/page";
 
 export default function Homepage() {
+  const [showPostContent, setShowPostContent] = useState(false);
+
   return (
     <>
-    <Share />
-    <Feed />
+      {!showPostContent ? (
+        <>
+          <Share onOpenPost={() => setShowPostContent(true)} />
+          <Feed />
+        </>
+      ) : (
+        <PostContent />
+      )}
     </>
   );
 }

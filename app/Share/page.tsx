@@ -1,10 +1,8 @@
 "use client";
 import React from "react";
 import Image from "../components/Image";
-import { useRouter } from "next/navigation";
 
-export default function Share() {
-  const router = useRouter();
+export default function Share({ onOpenPost }: { onOpenPost: () => void }) {
 
   return (
     <div className="p-4 flex gap-4">
@@ -13,10 +11,10 @@ export default function Share() {
       </div>
 
       <div className="flex flex-1 flex-col gap-4 cursor-pointer">
-        <button
+      <button
           type="button"
-          onClick={() => router.push("/PostContent")}
           className="flex items-center border-[1px] border-borderGrey bg-inoutGrey w-100 h-12 rounded-md"
+          onClick={onOpenPost} 
         >
           <p className="p-2 text-white">Write your text here</p>
         </button>
