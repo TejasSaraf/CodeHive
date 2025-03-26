@@ -14,9 +14,10 @@ export default function ConditionalRendering() {
   return (
     <>
         <div className="flex-1 lg:min-w-[600px] border-x-[1px] border-borderGrey h-screen overflow-y-auto">
-          {pathName === "/PostContent" ? <PostContent /> : <Homepage />}
+          {pathName === "/PostContent" ? <PostContent onGoBack={function (): void {
+          throw new Error("Function not implemented.");
+        } } /> : <Homepage />}
         </div>
-        
     </>
   );
 }

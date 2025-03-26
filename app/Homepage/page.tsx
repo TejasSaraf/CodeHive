@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Feed from "../Feed/page";
 import Share from "../Share/page";
 import PostContent from "../PostContent/page"; 
-import Rightbar from "../@Rightbar/page";
 
 export default function Homepage() {
   const [showPostContent, setShowPostContent] = useState(false);
@@ -15,7 +14,7 @@ export default function Homepage() {
           <Feed />
         </>
       ) : (
-        <PostContent />
+        <PostContent onGoBack={() => setShowPostContent(false)} />
       )}
     </>
   );
