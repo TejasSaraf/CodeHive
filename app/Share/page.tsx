@@ -25,7 +25,10 @@ export default function Share() {
         <div className="flex align-center border-[1px] border-borderGrey bg-inoutGrey w-100 h-12 rounded-md justify-between items-center p-4">
           <p className="text-white">Add to your post</p>
           <div className="flex gap-4 align-center justify-center">
-            <button className="flex flex-col items-center ">
+            <button
+              className="flex flex-col items-center "
+              onClick={handleClick}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -44,7 +47,10 @@ export default function Share() {
               <p className="text-white text-sm">Text</p>
             </button>
 
-            <button className="flex flex-col items-center">
+            <button
+              className="flex flex-col items-center"
+              onClick={handleClick}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -63,7 +69,10 @@ export default function Share() {
               <p className="text-white text-sm">Code</p>
             </button>
 
-            <button className="flex flex-col items-center">
+            <button
+              className="flex flex-col items-center"
+              onClick={handleClick}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -88,7 +97,10 @@ export default function Share() {
         </div>
 
         <div className="flex justify-end">
-          <button className="bg-blue-500 px-2 py-1 rounded-md flex items-center justify-center hover:bg-blue-600 transition-colors">
+          <button
+            className="bg-blue-500 px-2 py-1 rounded-md flex items-center justify-center hover:bg-blue-600 transition-colors"
+            onClick={handleClick}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
