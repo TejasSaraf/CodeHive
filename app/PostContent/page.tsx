@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Copy, Code} from 'lucide-react';
 
 export default function PostContent() {
   const [content, setContent] = useState("");
+  const [activeSection, setActiveSection] = useState("text");
 
   const handleInputChange = (e: React.FormEvent<HTMLDivElement>) => {
     setContent(e.currentTarget.textContent || "");
@@ -14,9 +16,38 @@ export default function PostContent() {
   const handleClick = () => {
     router.push("/");
   };
-  
+
+  const navigateToCode = () => {
+    setActiveSection("code");
+  };
+
+  const navigateToText = () => {
+    setActiveSection("text");
+  };
+
+  const [code, setCode] = useState<string>('');
+  const [lineCount, setLineCount] = useState<number>(1);
+  const editorRef = useRef<HTMLDivElement>(null);
+  const lineNumbersRef = useRef<HTMLDivElement>(null);
+
+  // Improved line number calculation
+  const updateLineNumbers = () => {
+    if (editorRef.current) {
+      // Split code by newline, handle empty string case
+      const lines = code.split('\n');
+      const newLineCount = Math.max(1, lines.length);
+      
+      setLineCount(newLineCount);
+      
+      // Sync line numbers with scroll
+      if (lineNumbersRef.current) {
+        lineNumbersRef.current.scrollTop = editorRef.current.scrollTop;
+      }
+    }
+  };
+
   return (
-    <div className=" flex flex-col gap-2 w-full h-full p-4">
+    <div className="flex flex-col gap-2 w-full h-full p-4">
       <div className="flex items-center justify-between p-4">
         <div className="flex gap-2">
           <button onClick={handleClick}>
@@ -51,209 +82,272 @@ export default function PostContent() {
         </div>
       </div>
 
-      <div className="bg-[#1a1a1a] rounded-lg p-2 border border-x-[1px] border-white w-full h-2/3">
-        <div className="flex iems-center gap-2 border-b border-borderGrey">
-          <div className="flex items-center gap-2 p-2">
-            <button>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                className="w-4 h-5"
-              >
-                <rect width="24" height="24" fill="rgb(26 26 26)" />
-                <path
-                  d="M6 12V20H14.1C16.2539 20 18 18.2091 18 16C18 13.7909 16.2539 12 14.1 12H6ZM6 12H12.9C15.0539 12 16.8 10.2091 16.8 8C16.8 5.79086 15.0539 4 12.9 4H6V12Z"
+      {activeSection === "text" && (
+        <div className="text bg-[#1a1a1a] rounded-lg p-2 border border-x-[1px] border-white w-full h-2/3">
+          <div className="flex iems-center gap-2 border-b border-borderGrey">
+            <div className="flex items-center gap-2 p-2">
+              <button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="w-4 h-5"
+                >
+                  <rect width="24" height="24" fill="rgb(26 26 26)" />
+                  <path
+                    d="M6 12V20H14.1C16.2539 20 18 18.2091 18 16C18 13.7909 16.2539 12 14.1 12H6ZM6 12H12.9C15.0539 12 16.8 10.2091 16.8 8C16.8 5.79086 15.0539 4 12.9 4H6V12Z"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+              <button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="w-4 h-5"
+                >
+                  <g clipPath="url(#clip0_2426_55)">
+                    <rect width="24" height="24" fill="rgb(26 26 26)" />
+                    <path
+                      d="M11 5H17"
+                      stroke="white"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M7 19H13"
+                      stroke="white"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M14 5L10 19"
+                      stroke="white"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_2426_55">
+                      <rect width="24" height="24" fill="white" />
+                    </clipPath>
+                  </defs>
+                </svg>
+              </button>
+              <button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="w-4 h-5"
+                >
+                  <rect width="24" height="24" fill="rgb(26 26 26)" />
+                  <path
+                    d="M6 3V12C6 15.3223 8.67773 18 12 18C15.3223 18 18 15.3223 18 12V3H16.5V12C16.5 14.5283 14.5283 16.5 12 16.5C9.47168 16.5 7.5 14.5283 7.5 12V3H6ZM4.5 19.5V21H19.5V19.5H4.5Z"
+                    fill="white"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div className="flex items-center">
+              <button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
                   stroke="white"
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-            <button>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                className="w-4 h-5"
-              >
-                <g clipPath="url(#clip0_2426_55)">
-                  <rect width="24" height="24" fill="rgb(26 26 26)" />
-                  <path
-                    d="M11 5H17"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M7 19H13"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M14 5L10 19"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </g>
-                <defs>
-                  <clipPath id="clip0_2426_55">
-                    <rect width="24" height="24" fill="white" />
-                  </clipPath>
-                </defs>
-              </svg>
-            </button>
-            <button>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                className="w-4 h-5"
-              >
-                <rect width="24" height="24" fill="rgb(26 26 26)" />
-                <path
-                  d="M6 3V12C6 15.3223 8.67773 18 12 18C15.3223 18 18 15.3223 18 12V3H16.5V12C16.5 14.5283 14.5283 16.5 12 16.5C9.47168 16.5 7.5 14.5283 7.5 12V3H6ZM4.5 19.5V21H19.5V19.5H4.5Z"
-                  fill="white"
-                />
-              </svg>
-            </button>
+                  className="lucide lucide-heading w-4 h-5"
+                >
+                  <path d="M6 12h12"></path>
+                  <path d="M6 20V4"></path>
+                  <path d="M18 20V4"></path>
+                </svg>
+              </button>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-list-ordered w-4 h-5"
+                >
+                  <line x1="10" x2="21" y1="6" y2="6"></line>
+                  <line x1="10" x2="21" y1="12" y2="12"></line>
+                  <line x1="10" x2="21" y1="18" y2="18"></line>
+                  <path d="M4 6h1v4"></path>
+                  <path d="M4 10h2"></path>
+                  <path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"></path>
+                </svg>
+              </button>
+
+              <button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-list w-4 h-5"
+                >
+                  <line x1="8" x2="21" y1="6" y2="6"></line>
+                  <line x1="8" x2="21" y1="12" y2="12"></line>
+                  <line x1="8" x2="21" y1="18" y2="18"></line>
+                  <line x1="3" x2="3.01" y1="6" y2="6"></line>
+                  <line x1="3" x2="3.01" y1="12" y2="12"></line>
+                  <line x1="3" x2="3.01" y1="18" y2="18"></line>
+                </svg>
+              </button>
+
+              <button className="flex items-center gap-1 border border-x-[1px] border-borderGrey px-2 py-1 rounded-lg">
+                <span className="text-white text-sm">Insert</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-chevron-down h-4 w-5 opacity-50"
+                >
+                  <path d="m6 9 6 6 6-6"></path>
+                </svg>
+              </button>
+
+              <button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-trash2 w-4 h-5"
+                >
+                  <path d="M3 6h18"></path>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                  <line x1="10" x2="10" y1="11" y2="17"></line>
+                  <line x1="14" x2="14" y1="11" y2="17"></line>
+                </svg>
+              </button>
+            </div>
           </div>
-          <div className="flex items-center">
-            <button>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-heading w-4 h-5"
-              >
-                <path d="M6 12h12"></path>
-                <path d="M6 20V4"></path>
-                <path d="M18 20V4"></path>
-              </svg>
-            </button>
-          </div>
 
-          <div className="flex items-center gap-2">
-            <button>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-list-ordered w-4 h-5"
-              >
-                <line x1="10" x2="21" y1="6" y2="6"></line>
-                <line x1="10" x2="21" y1="12" y2="12"></line>
-                <line x1="10" x2="21" y1="18" y2="18"></line>
-                <path d="M4 6h1v4"></path>
-                <path d="M4 10h2"></path>
-                <path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"></path>
-              </svg>
-            </button>
+          <div
+            contentEditable={true}
+            role="textbox"
+            onInput={handleInputChange}
+            className={`w-full h-[95%] p-2 overflow-hidden flex flex-grow relative text-white outline-none ${
+              content
+                ? ""
+                : "before:content-[attr(data-placeholder)] before:text-gray-500 before:absolute before:pointer-events-none"
+            }`}
+            data-placeholder="Write your post here..."
+          ></div>
+        </div>
+      )}
 
-            <button>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-list w-4 h-5"
-              >
-                <line x1="8" x2="21" y1="6" y2="6"></line>
-                <line x1="8" x2="21" y1="12" y2="12"></line>
-                <line x1="8" x2="21" y1="18" y2="18"></line>
-                <line x1="3" x2="3.01" y1="6" y2="6"></line>
-                <line x1="3" x2="3.01" y1="12" y2="12"></line>
-                <line x1="3" x2="3.01" y1="18" y2="18"></line>
-              </svg>
-            </button>
-
-            <button className="flex items-center gap-1 border border-x-[1px] border-borderGrey px-2 py-1 rounded-lg">
-              <span className="text-white text-sm">Insert</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-chevron-down h-4 w-5 opacity-50"
-              >
-                <path d="m6 9 6 6 6-6"></path>
-              </svg>
-            </button>
-
-            <button>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-trash2 w-4 h-5"
-              >
-                <path d="M3 6h18"></path>
-                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                <line x1="10" x2="10" y1="11" y2="17"></line>
-                <line x1="14" x2="14" y1="11" y2="17"></line>
-              </svg>
-            </button>
+      {activeSection === "code" && (
+        <div className="code bg-[#1a1a1a] rounded-lg p-2 border border-x-[1px] border-white w-full h-2/3">
+          <div className="flex flex-col gap-2 w-full h-full">
+            <div className="bg-[#1a1a1a] rounded-lg w-full h-full">
+              {/* Header */}
+              <div className="flex items-center justify-between p-2">
+                <div className="flex gap-2 justify-center items-center">
+                  {/* Language Selector */}
+                  <select 
+                    className="bg-[#1a1a1a] text-white text-sm p-1 rounded"
+                  >
+                    <option>Python</option>
+                    <option>JavaScript</option>
+                    <option>TypeScript</option>
+                    <option>Java</option>
+                    <option>C++</option>
+                    <option>Other</option>
+                  </select>
+    
+                  {/* Copy Button */}
+                  <button 
+                    className="text-white hover:bg-gray-700 p-1 rounded"
+                  >
+                    <Copy className="w-5 h-5" />
+                  </button>
+    
+                  {/* Line Count Display */}
+                  <div className="text-white text-sm ml-4">
+                    Lines: {lineCount}
+                  </div>
+                </div>
+              </div>
+    
+              {/* Editor Container */}
+              <div className="flex w-full h-[88%]">
+                {/* Line Numbers */}
+                <div 
+                  ref={lineNumbersRef}
+                  className="bg-[#1a1a1a] w-10 p-2 text-right text-gray-400 overflow-hidden"
+                >
+                  {[...Array(lineCount)].map((_, i) => (
+                    <div key={i}>{i + 1}</div>
+                  ))}
+                </div>
+    
+                {/* Code Editor */}
+                <div 
+                  contentEditable={true}
+                  role="textbox"
+                  className="w-full h-full p-2 overflow-auto text-white outline-none bg-[#1a1a1a] rounded-lg"
+                  data-placeholder="Paste your code here..."
+                />
+              </div>
+            </div>
           </div>
         </div>
-
-        <div
-          contentEditable={true}
-          role="textbox"
-          onInput={handleInputChange}
-          className={`w-full h-[95%] p-2 overflow-hidden flex flex-grow relative text-white outline-none ${
-            content
-              ? ""
-              : "before:content-[attr(data-placeholder)] before:text-gray-500 before:absolute before:pointer-events-none"
-          }`}
-          data-placeholder="Write your post here..."
-        ></div>
-      </div>
+      )}
 
       <div className="flex items-center justify-between bg-[#1a1a1a] rounded-lg p-2 border border-x-[1px] border-borderGrey w-full h-14 ">
         <p className="text-white">Add to your post</p>
         <div className="flex gap-4 align-center justify-center">
-          <button className="flex flex-col items-center ">
+          <button
+            className="flex flex-col items-center "
+            onClick={navigateToText}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -272,7 +366,10 @@ export default function PostContent() {
             <p className="text-white text-sm">Text</p>
           </button>
 
-          <button className="flex flex-col items-center">
+          <button
+            className="flex flex-col items-center"
+            onClick={navigateToCode}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
