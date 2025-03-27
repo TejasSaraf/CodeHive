@@ -1,17 +1,25 @@
-import React, { useState } from "react";
+"use client";
 
-export default function PostContent({ onGoBack }: { onGoBack: () => void }) {
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+
+export default function PostContent() {
   const [content, setContent] = useState("");
 
   const handleInputChange = (e: React.FormEvent<HTMLDivElement>) => {
     setContent(e.currentTarget.textContent || "");
   };
 
+  const router = useRouter();
+  const handleClick = () => {
+    router.push("/");
+  };
+  
   return (
     <div className=" flex flex-col gap-2 w-full h-full p-4">
       <div className="flex items-center justify-between p-4">
         <div className="flex gap-2">
-          <button onClick={onGoBack}>
+          <button onClick={handleClick}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"

@@ -1,20 +1,22 @@
-import React, { useState } from "react";
+"use client";
+import React from "react";
 import Feed from "../Feed/page";
 import Share from "../Share/page";
-import PostContent from "../PostContent/page"; 
+import { usePathname } from "next/navigation";
+import PostContent from "../PostContent/page";
 
 export default function Homepage() {
-  const [showPostContent, setShowPostContent] = useState(false);
+  const path = usePathname();
 
   return (
     <>
-      {!showPostContent ? (
+      {path === "/" ? (
         <>
-          <Share onOpenPost={() => setShowPostContent(true)} />
+          <Share />
           <Feed />
         </>
       ) : (
-        <PostContent onGoBack={() => setShowPostContent(false)} />
+        <PostContent />
       )}
     </>
   );
