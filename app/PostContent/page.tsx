@@ -2,7 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Copy, Code} from 'lucide-react';
+import { Copy, Code } from "lucide-react";
 
 export default function PostContent() {
   const [content, setContent] = useState("");
@@ -25,21 +25,22 @@ export default function PostContent() {
     setActiveSection("text");
   };
 
-  const [code, setCode] = useState<string>('');
+  const navigateToCollection = () => {
+    setActiveSection("collection");
+  };
+
+  const [code, setCode] = useState<string>("");
   const [lineCount, setLineCount] = useState<number>(1);
   const editorRef = useRef<HTMLDivElement>(null);
   const lineNumbersRef = useRef<HTMLDivElement>(null);
 
-  // Improved line number calculation
   const updateLineNumbers = () => {
     if (editorRef.current) {
-      // Split code by newline, handle empty string case
-      const lines = code.split('\n');
+      const lines = code.split("\n");
       const newLineCount = Math.max(1, lines.length);
-      
+
       setLineCount(newLineCount);
-      
-      // Sync line numbers with scroll
+
       if (lineNumbersRef.current) {
         lineNumbersRef.current.scrollTop = editorRef.current.scrollTop;
       }
@@ -287,13 +288,9 @@ export default function PostContent() {
         <div className="code bg-[#1a1a1a] rounded-lg p-2 border border-x-[1px] border-white w-full h-2/3">
           <div className="flex flex-col gap-2 w-full h-full">
             <div className="bg-[#1a1a1a] rounded-lg w-full h-full">
-              {/* Header */}
               <div className="flex items-center justify-between p-2">
                 <div className="flex gap-2 justify-center items-center">
-                  {/* Language Selector */}
-                  <select 
-                    className="bg-[#1a1a1a] text-white text-sm p-1 rounded"
-                  >
+                  <select className="bg-[#1a1a1a] text-white text-sm p-1 rounded">
                     <option>Python</option>
                     <option>JavaScript</option>
                     <option>TypeScript</option>
@@ -301,25 +298,19 @@ export default function PostContent() {
                     <option>C++</option>
                     <option>Other</option>
                   </select>
-    
-                  {/* Copy Button */}
-                  <button 
-                    className="text-white hover:bg-gray-700 p-1 rounded"
-                  >
+
+                  <button className="text-white hover:bg-gray-700 p-1 rounded">
                     <Copy className="w-5 h-5" />
                   </button>
-    
-                  {/* Line Count Display */}
+
                   <div className="text-white text-sm ml-4">
                     Lines: {lineCount}
                   </div>
                 </div>
               </div>
-    
-              {/* Editor Container */}
+
               <div className="flex w-full h-[88%]">
-                {/* Line Numbers */}
-                <div 
+                <div
                   ref={lineNumbersRef}
                   className="bg-[#1a1a1a] w-10 p-2 text-right text-gray-400 overflow-hidden"
                 >
@@ -327,9 +318,8 @@ export default function PostContent() {
                     <div key={i}>{i + 1}</div>
                   ))}
                 </div>
-    
-                {/* Code Editor */}
-                <div 
+
+                <div
                   contentEditable={true}
                   role="textbox"
                   className="w-full h-full p-2 overflow-auto text-white outline-none bg-[#1a1a1a] rounded-lg"
@@ -338,6 +328,43 @@ export default function PostContent() {
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {activeSection === "collection" && (
+        <div className="collection bg-[#1a1a1a] rounded-lg p-2 border border-x-[1px] border-white w-full h-2/3">
+          <div className="flex items-center gap-2 p-2 border-b border-borderGrey">
+            <input
+              className="flex h-8 w-full rounded-md border border-input bg-[#1a1a1a] px-3 py-1 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 flex-1"
+              placeholder="Search collections..."
+              type="text"
+            />
+            <div className="flex gap-2 items-center">
+              <button className="flex gap-2 items-center px-2 py-1 bg-blue-500 text-white text-base rounded-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-circle-plus h-5 w-5"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M8 12h8"></path>
+                  <path d="M12 8v8"></path>
+                </svg>
+                <span className="text-white">Add Collection</span>
+              </button>
+            </div>
+          </div>
+
+          <div
+            className={`w-full h-[95%] p-2 overflow-hidden flex flex-grow relative text-white outline-none`}
+          ></div>
         </div>
       )}
 
@@ -388,7 +415,10 @@ export default function PostContent() {
             <p className="text-white text-sm">Code</p>
           </button>
 
-          <button className="flex flex-col items-center">
+          <button
+            className="flex flex-col items-center "
+            onClick={navigateToCollection}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
