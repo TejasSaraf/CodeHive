@@ -3,10 +3,14 @@
 import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Copy, Code } from "lucide-react";
+import Image from "../components/Image";
+import { shareAction } from "../actions";
 
 export default function PostContent() {
   const [content, setContent] = useState("");
   const [activeSection, setActiveSection] = useState("text");
+  const [media, setMedia] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: React.FormEvent<HTMLDivElement>) => {
     setContent(e.currentTarget.textContent || "");
@@ -27,6 +31,18 @@ export default function PostContent() {
 
   const navigateToCollection = () => {
     setActiveSection("collection");
+  };
+
+  const handleMediaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setMedia(e.target.files[0]);
+    }
+  };
+
+  const triggerFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   const [code, setCode] = useState<string>("");
@@ -332,7 +348,7 @@ export default function PostContent() {
       )}
 
       {activeSection === "collection" && (
-        <div className="collection bg-[#1a1a1a] rounded-lg p-2 border border-x-[1px] border-white w-full h-2/3">
+        <form className="collection bg-[#1a1a1a] rounded-lg p-2 border border-x-[1px] border-white w-full h-2/3" action={shareAction}>
           <div className="flex items-center gap-2 p-2 border-b border-borderGrey">
             <input
               className="flex h-8 w-full rounded-md border border-input bg-[#1a1a1a] px-3 py-1 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 flex-1"
@@ -340,7 +356,15 @@ export default function PostContent() {
               type="text"
             />
             <div className="flex gap-2 items-center">
-              <button className="flex gap-2 items-center px-2 py-1 bg-blue-500 text-white text-base rounded-lg">
+              <input
+                type="file"
+                className="hidden"
+                onChange={handleMediaChange}
+                ref={fileInputRef}
+                id="file"
+                name="file"
+              />
+              <button onClick={triggerFileInput} className="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -361,11 +385,7 @@ export default function PostContent() {
               </button>
             </div>
           </div>
-
-          <div
-            className={`w-full h-[95%] p-2 overflow-hidden flex flex-grow relative text-white outline-none`}
-          ></div>
-        </div>
+        </form>
       )}
 
       <div className="flex items-center justify-between bg-[#1a1a1a] rounded-lg p-2 border border-x-[1px] border-borderGrey w-full h-14 ">
