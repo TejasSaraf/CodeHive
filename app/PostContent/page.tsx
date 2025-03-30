@@ -36,6 +36,8 @@ export default function PostContent() {
   const handleMediaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setMedia(e.target.files[0]);
+
+      e.target.form?.requestSubmit();
     }
   };
 
@@ -348,7 +350,10 @@ export default function PostContent() {
       )}
 
       {activeSection === "collection" && (
-        <form className="collection bg-[#1a1a1a] rounded-lg p-2 border border-x-[1px] border-white w-full h-2/3" action={shareAction}>
+        <form
+          className="collection bg-[#1a1a1a] rounded-lg p-2 border border-x-[1px] border-white w-full h-2/3"
+          action={shareAction}
+        >
           <div className="flex items-center gap-2 p-2 border-b border-borderGrey">
             <input
               className="flex h-8 w-full rounded-md border border-input bg-[#1a1a1a] px-3 py-1 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 flex-1"
@@ -364,7 +369,12 @@ export default function PostContent() {
                 id="file"
                 name="file"
               />
-              <button onClick={triggerFileInput} className="flex items-center">
+              {/* Change this to a regular button, not for form submission */}
+              <button
+                type="button"
+                onClick={triggerFileInput}
+                className="flex items-center"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -381,7 +391,15 @@ export default function PostContent() {
                   <path d="M8 12h8"></path>
                   <path d="M12 8v8"></path>
                 </svg>
-                <span className="text-white">Add Collection</span>
+                <span className="text-white">Select File</span>
+              </button>
+
+              {/* Add a submit button to trigger the form submission */}
+              <button
+                type="submit"
+                className="flex items-center bg-blue-600 px-3 py-1 rounded text-white"
+              >
+                Add Collection
               </button>
             </div>
           </div>
