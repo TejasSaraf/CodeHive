@@ -3,7 +3,6 @@
 import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Copy, Code } from "lucide-react";
-import Image from "../components/Image";
 import { shareAction } from "../actions";
 
 export default function PostContent() {
@@ -11,6 +10,7 @@ export default function PostContent() {
   const [activeSection, setActiveSection] = useState("text");
   const [media, setMedia] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [mediaUrl, setMediaUrl] = useState<string | null>(null);
 
   const handleInputChange = (e: React.FormEvent<HTMLDivElement>) => {
     setContent(e.currentTarget.textContent || "");
@@ -35,7 +35,9 @@ export default function PostContent() {
 
   const handleMediaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setMedia(e.target.files[0]);
+      const file = e.target.files[0];
+      setMedia(file);
+      setMediaUrl(URL.createObjectURL(file)); 
 
       e.target.form?.requestSubmit();
     }
@@ -369,7 +371,7 @@ export default function PostContent() {
                 id="file"
                 name="file"
               />
-              {/* Change this to a regular button, not for form submission */}
+
               <button
                 type="button"
                 onClick={triggerFileInput}
@@ -394,7 +396,6 @@ export default function PostContent() {
                 <span className="text-white">Select File</span>
               </button>
 
-              {/* Add a submit button to trigger the form submission */}
               <button
                 type="submit"
                 className="flex items-center bg-blue-600 px-3 py-1 rounded text-white"
@@ -402,6 +403,9 @@ export default function PostContent() {
                 Add Collection
               </button>
             </div>
+          </div>
+          <div className="post">
+            {mediaUrl && <img src={mediaUrl} alt="Uploaded file" />}
           </div>
         </form>
       )}
