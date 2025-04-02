@@ -1,9 +1,32 @@
+
 import React from "react";
 import Image from "../components/Image";
-import PostInfo from "../PostInfo/page";
-import PostInteraction from "../PostInteraction/page";
+import PostInfo from "./PostInfo";
+import PostInteraction from "./PostInteraction";
+import { imagekit } from "../utils";
+
+interface fileDetailsResponse {
+  width: number,
+  height: number,
+  filePath: string,
+  url: string,
+  fileType: string,
+  customMetaData?: {sensitive: boolean}; 
+}
 
 export default function Post() {
+
+  const getFileDetails = (fileId: string): Promise<fileDetailsResponse> => {
+    return new Promise((resolve, reject) => {
+      imagekit.getFileDetails(fileId, function(error, result) {
+        if(error) reject(error);
+        else resolve(result as fileDetailsResponse);
+      });
+    });
+  }
+
+  const fileDetails = getFileDetails("67ec2605432c476416f2f3ac");
+
   return (
     <div className="p-4 border-y-[1px] border-borderGrey">
       {/* Post Content */}

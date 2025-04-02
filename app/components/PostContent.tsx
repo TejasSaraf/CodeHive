@@ -353,8 +353,11 @@ export default function PostContent() {
 
       {activeSection === "collection" && (
         <form
-          className="collection bg-[#1a1a1a] rounded-lg p-2 border border-x-[1px] border-white w-full h-2/3"
-          action={shareAction}
+        className="collection bg-[#1a1a1a] rounded-lg p-2 border border-x-[1px] border-white w-full h-2/3"
+        action={(formData) => shareAction(formData, { 
+          type: "original", 
+          sensitive: false
+        })}
         >
           <div className="flex items-center gap-2 p-2 border-b border-borderGrey">
             <input
@@ -374,7 +377,6 @@ export default function PostContent() {
 
               <button
                 type="button"
-                onClick={triggerFileInput}
                 className="flex items-center"
               >
                 <svg
@@ -399,6 +401,7 @@ export default function PostContent() {
               <button
                 type="submit"
                 className="flex items-center bg-blue-600 px-3 py-1 rounded text-white"
+                onClick={triggerFileInput}
               >
                 Add Collection
               </button>
