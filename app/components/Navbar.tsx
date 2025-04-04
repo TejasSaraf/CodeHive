@@ -3,9 +3,11 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 export default function Navbar() {
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   const handleSignIn = () => {
     router.push("/SignIn");
@@ -26,13 +28,25 @@ export default function Navbar() {
         </h1>
       </div>
 
-      <button
-        type="button"
-        className="font-sans text-white text-xl border-[1px] border-borderGrey rounded-lg px-4 py-1"
-        onClick={handleSignIn}
-      >
-        Signin
-      </button>
+      <div className="flex items-center gap-4">
+        {session?.user?.image ? (
+          <Image
+            src={session.user.image}
+            width={40}
+            height={40}
+            alt="Profile"
+            className="rounded-full"
+          />
+        ) : (
+          <button
+            type="button"
+            className="font-sans text-white text-xl border-[1px] border-borderGrey rounded-lg px-4 py-1"
+            onClick={handleSignIn}
+          >
+            Signin
+          </button>
+        )}
+      </div>
     </nav>
   );
 }
