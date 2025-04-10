@@ -1,16 +1,22 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
+import Signout from "./Signout";
 
 export default function Navbar() {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const [isSignoutVisible, setSignoutVisible] = useState(false);
 
   const handleSignIn = () => {
     router.push("/SignIn");
+  };
+
+  const openSignout = () => {
+    setSignoutVisible(true);
   };
 
   return (
@@ -30,13 +36,18 @@ export default function Navbar() {
 
       <div className="flex items-center gap-4">
         {session?.user?.image ? (
-          <Image
-            src={session.user.image}
-            width={40}
-            height={40}
-            alt="Profile"
-            className="rounded-full"
-          />
+          <div>
+            <button onClick={openSignout}>
+              <Image
+                src={session.user.image}
+                width={40}
+                height={40}
+                alt="Profile"
+                className="rounded-full"
+              />
+            </button>
+            {isSignoutVisible && <Signout />}
+          </div>
         ) : (
           <button
             type="button"
