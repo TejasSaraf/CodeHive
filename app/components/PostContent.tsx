@@ -2,19 +2,34 @@
 
 import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Copy, Code } from "lucide-react";
+import { Copy } from "lucide-react";
 import { shareAction } from "../actions";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import Link from "@tiptap/extension-link";
 
 export default function PostContent() {
-  const [content, setContent] = useState("");
   const [activeSection, setActiveSection] = useState("text");
   const [media, setMedia] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [mediaUrl, setMediaUrl] = useState<string | null>(null);
 
-  const handleInputChange = (e: React.FormEvent<HTMLDivElement>) => {
-    setContent(e.currentTarget.textContent || "");
-  };
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      Link.configure({
+        openOnClick: false,
+      }),
+    ],
+    editorProps: {
+      attributes: {
+        class:
+          "prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-1 focus:outline-none",
+      },
+    },
+  });
 
   const router = useRouter();
   const handleClick = () => {
@@ -37,7 +52,7 @@ export default function PostContent() {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setMedia(file);
-      setMediaUrl(URL.createObjectURL(file)); 
+      setMediaUrl(URL.createObjectURL(file));
 
       e.target.form?.requestSubmit();
     }
@@ -107,7 +122,14 @@ export default function PostContent() {
         <div className="text bg-[#1a1a1a] rounded-lg p-2 border border-x-[1px] border-white w-full h-2/3">
           <div className="flex iems-center gap-2 border-b border-borderGrey">
             <div className="flex items-center gap-2 p-2">
-              <button>
+              <button
+                onClick={() => {
+                  if (editor) editor.chain().focus().toggleBold().run();
+                }}
+                className={`bold ${
+                  editor?.isActive("bold") ? "bg-white text-black" : ""
+                }`}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -126,7 +148,14 @@ export default function PostContent() {
                   />
                 </svg>
               </button>
-              <button>
+              <button
+                onClick={() => {
+                  if (editor) editor.chain().focus().toggleItalic().run();
+                }}
+                className={`italic ${
+                  editor?.isActive("italic") ? "bg-white text-black" : ""
+                }`}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -166,7 +195,14 @@ export default function PostContent() {
                   </defs>
                 </svg>
               </button>
-              <button>
+              <button
+                onClick={() => {
+                  if (editor) editor.chain().focus().toggleUnderline().run();
+                }}
+                className={`underline ${
+                  editor?.isActive("underline") ? "bg-white text-black" : ""
+                }`}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -290,17 +326,9 @@ export default function PostContent() {
             </div>
           </div>
 
-          <div
-            contentEditable={true}
-            role="textbox"
-            onInput={handleInputChange}
-            className={`w-full h-[95%] p-2 overflow-hidden flex flex-grow relative text-white outline-none ${
-              content
-                ? ""
-                : "before:content-[attr(data-placeholder)] before:text-gray-500 before:absolute before:pointer-events-none"
-            }`}
-            data-placeholder="Write your post here..."
-          ></div>
+          <div className="editor-wrapper text-white ">
+            <EditorContent editor={editor} />
+          </div>
         </div>
       )}
 
@@ -353,11 +381,13 @@ export default function PostContent() {
 
       {activeSection === "collection" && (
         <form
-        className="collection bg-[#1a1a1a] rounded-lg p-2 border border-x-[1px] border-white w-full h-2/3"
-        action={(formData) => shareAction(formData, { 
-          type: "original", 
-          sensitive: false
-        })}
+          className="collection bg-[#1a1a1a] rounded-lg p-2 border border-x-[1px] border-white w-full h-2/3"
+          action={(formData) =>
+            shareAction(formData, {
+              type: "original",
+              sensitive: false,
+            })
+          }
         >
           <div className="flex items-center gap-2 p-2 border-b border-borderGrey">
             <input
@@ -375,10 +405,7 @@ export default function PostContent() {
                 name="file"
               />
 
-              <button
-                type="button"
-                className="flex items-center"
-              >
+              <button type="button" className="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
