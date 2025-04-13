@@ -2,19 +2,23 @@
 
 import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Copy } from "lucide-react";
 import { shareAction } from "../actions";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import Link from "@tiptap/extension-link";
 import Editor from "@monaco-editor/react";
+import Heading from "@tiptap/extension-heading";
+import OrderedList from "@tiptap/extension-ordered-list";
+import BulletList from "@tiptap/extension-bullet-list";
+import ConfirmModal from "./ConfirmModal";
 
 export default function PostContent() {
   const [activeSection, setActiveSection] = useState("text");
   const [media, setMedia] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [mediaUrl, setMediaUrl] = useState<string | null>(null);
+  const [showConfirmModel, setShowConfirmModel] = useState(false);
 
   const editor = useEditor({
     extensions: [
@@ -23,6 +27,11 @@ export default function PostContent() {
       Link.configure({
         openOnClick: false,
       }),
+      Heading.configure({
+        levels: [1, 2, 3],
+      }),
+      BulletList,
+      OrderedList,
     ],
     editorProps: {
       attributes: {
@@ -219,8 +228,18 @@ export default function PostContent() {
                 </svg>
               </button>
             </div>
-            <div className="flex items-center">
-              <button>
+            <div className="heading flex items-center">
+              <button
+                onClick={() => {
+                  if (editor)
+                    editor.chain().focus().toggleHeading({ level: 1 }).run();
+                }}
+                className={`heading ${
+                  editor?.isActive("heading", { level: 1 })
+                    ? "bg-white text-black"
+                    : ""
+                }`}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -241,7 +260,14 @@ export default function PostContent() {
             </div>
 
             <div className="flex items-center gap-2">
-              <button>
+              <button
+                onClick={() =>
+                  editor?.chain().focus().toggleOrderedList().run()
+                }
+                className={`${
+                  editor?.isActive("orderedList") ? "bg-white text-black" : ""
+                }`}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -263,7 +289,12 @@ export default function PostContent() {
                 </svg>
               </button>
 
-              <button>
+              <button
+                onClick={() => editor?.chain().focus().toggleBulletList().run()}
+                className={`${
+                  editor?.isActive("bulletList") ? "bg-white text-black" : ""
+                }`}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -285,25 +316,10 @@ export default function PostContent() {
                 </svg>
               </button>
 
-              <button className="flex items-center gap-1 border border-x-[1px] border-borderGrey px-2 py-1 rounded-lg">
-                <span className="text-white text-sm">Insert</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-chevron-down h-4 w-5 opacity-50"
-                >
-                  <path d="m6 9 6 6 6-6"></path>
-                </svg>
-              </button>
-
-              <button>
+              <button
+                className="delete"
+                onClick={() => setShowConfirmModel(true)}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -323,6 +339,16 @@ export default function PostContent() {
                   <line x1="14" x2="14" y1="11" y2="17"></line>
                 </svg>
               </button>
+              {showConfirmModel && (
+                <ConfirmModal
+                  message="Are you sure you want to clear all text content?"
+                  onConfirm={() => {
+                    editor?.commands.clearContent();
+                    setShowConfirmModel(false);
+                  }}
+                  onCancel={() => setShowConfirmModel(false)}
+                />
+              )}
             </div>
           </div>
 
@@ -398,27 +424,6 @@ export default function PostContent() {
                 id="file"
                 name="file"
               />
-
-              <button type="button" className="flex items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-circle-plus h-5 w-5"
-                >
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <path d="M8 12h8"></path>
-                  <path d="M12 8v8"></path>
-                </svg>
-                <span className="text-white">Select File</span>
-              </button>
-
               <button
                 type="submit"
                 className="flex items-center bg-blue-600 px-3 py-1 rounded text-white"
