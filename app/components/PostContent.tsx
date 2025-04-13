@@ -8,6 +8,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import Link from "@tiptap/extension-link";
+import Editor from "@monaco-editor/react";
 
 export default function PostContent() {
   const [activeSection, setActiveSection] = useState("text");
@@ -58,27 +59,26 @@ export default function PostContent() {
     }
   };
 
-  const triggerFileInput = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
+  const [language, setLanguage] = useState("javascript");
+  const [code, setCode] = useState({
+    javascript: "// JavaScript Code\nconsole.log('Hello, world!');",
+    python: "# Python Code\nprint('Hello, world!')",
+    cpp: '// C++ Code\n#include <iostream>\nint main() {\n  std::cout << "Hello, world!";\n  return 0;\n}',
+  });
+
+  const handleLangChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setLanguage(e.target.value);
+  };
+
+  const handleCodeChange = (value: string | undefined) => {
+    if (value !== undefined) {
+      setCode((prev) => ({ ...prev, [language]: value }));
     }
   };
 
-  const [code, setCode] = useState<string>("");
-  const [lineCount, setLineCount] = useState<number>(1);
-  const editorRef = useRef<HTMLDivElement>(null);
-  const lineNumbersRef = useRef<HTMLDivElement>(null);
-
-  const updateLineNumbers = () => {
-    if (editorRef.current) {
-      const lines = code.split("\n");
-      const newLineCount = Math.max(1, lines.length);
-
-      setLineCount(newLineCount);
-
-      if (lineNumbersRef.current) {
-        lineNumbersRef.current.scrollTop = editorRef.current.scrollTop;
-      }
+  const triggerFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
 
@@ -338,42 +338,36 @@ export default function PostContent() {
             <div className="bg-[#1a1a1a] rounded-lg w-full h-full">
               <div className="flex items-center justify-between p-2">
                 <div className="flex gap-2 justify-center items-center">
-                  <select className="bg-[#1a1a1a] text-white text-sm p-1 rounded">
-                    <option>Python</option>
-                    <option>JavaScript</option>
-                    <option>TypeScript</option>
-                    <option>Java</option>
-                    <option>C++</option>
-                    <option>Other</option>
+                  <label
+                    htmlFor="language"
+                    className="text-white font-semibold"
+                  >
+                    Language:
+                  </label>
+                  <select
+                    id="language"
+                    value={language}
+                    onChange={handleLangChange}
+                    className="p-2 bg-gray-800 text-white rounded-md"
+                  >
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="cpp">C++</option>
                   </select>
-
-                  <button className="text-white hover:bg-gray-700 p-1 rounded">
-                    <Copy className="w-5 h-5" />
-                  </button>
-
-                  <div className="text-white text-sm ml-4">
-                    Lines: {lineCount}
-                  </div>
                 </div>
               </div>
-
-              <div className="flex w-full h-[88%]">
-                <div
-                  ref={lineNumbersRef}
-                  className="bg-[#1a1a1a] w-10 p-2 text-right text-gray-400 overflow-hidden"
-                >
-                  {[...Array(lineCount)].map((_, i) => (
-                    <div key={i}>{i + 1}</div>
-                  ))}
-                </div>
-
-                <div
-                  contentEditable={true}
-                  role="textbox"
-                  className="w-full h-full p-2 overflow-auto text-white outline-none bg-[#1a1a1a] rounded-lg"
-                  data-placeholder="Paste your code here..."
-                />
-              </div>
+              <Editor
+                height="400px"
+                language={language}
+                value={code[language as keyof typeof code]}
+                theme="vs-dark"
+                onChange={handleCodeChange}
+                options={{
+                  fontSize: 14,
+                  minimap: { enabled: false },
+                  scrollBeyondLastLine: false,
+                }}
+              />
             </div>
           </div>
         </div>
