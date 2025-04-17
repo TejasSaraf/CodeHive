@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, startTransition } from "react";
+import { createPost } from "@/app/(actions)/createPost"; 
 import { useRouter } from "next/navigation";
 import { shareAction } from "../actions";
 import { useEditor, EditorContent } from "@tiptap/react";
@@ -91,6 +92,19 @@ export default function PostContent() {
     }
   };
 
+  const pushPostData = () => {
+     if (!editor) return;                       // editor might not be ready
+    
+    const html    = editor.getHTML();          // rich text to store
+    const summary = editor.getText().slice(0, 255); // short desc (optional)
+    
+    startTransition(() => {
+    createPost(html, summary)
+    .then(() => router.push("/"))          // navigate to feed
+    .catch(err => console.error(err));     // TODO: surface error toasts
+    });
+    };
+
   return (
     <div className="flex flex-col gap-2 w-full h-full p-4">
       <div className="flex items-center justify-between p-4">
@@ -121,7 +135,7 @@ export default function PostContent() {
         </div>
 
         <div className="">
-          <button className="px-4 py-1 bg-blue-600 text-sm text-white rounded-lg">
+          <button className="px-4 py-1 bg-blue-600 text-sm text-white rounded-lg" onClick={pushPostData}>
             Post
           </button>
         </div>
