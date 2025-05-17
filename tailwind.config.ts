@@ -9,13 +9,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        textGrey:"#71767b",
-        textGreyLight:"#e7e9ea",
-        borderGrey:"#2f3336",
-        inoutGrey:"#202327",
-        iconBlue:"#id9bf0",
-        iconGreen:"#00ba7c",
-        iconPink:"#f91880",
+        textGrey: "#71767b",
+        textGreyLight: "#e7e9ea",
+        borderGrey: "#2f3336",
+        inoutGrey: "#202327",
+        iconBlue: "#id9bf0",
+        iconGreen: "#00ba7c",
+        iconPink: "#f91880",
+        primary: "rgb(33,150,243)",
       },
       fontFamily: {
         sans: [
